@@ -35,7 +35,7 @@ jobs:
           name: Update AUR
           command: |
             cd /tmp
-            ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts
+            echo "aur.archlinux.org,5.9.250.164 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBOZAVWmj2k+dHTfyum7FyIivGcVUkDFHaXmPNxDwF7l8TvkAN8VDQJHEEGJhALMYtNsQ+kt0gksSh4HZqj9n5hI=" >> ~/.ssh/known_hosts
             git clone ssh://aur@aur.archlinux.org/kube-capacity.git
             cd kube-capacity
             git config user.name "Toxblh Bot"
