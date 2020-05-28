@@ -35,20 +35,21 @@ jobs:
           name: Update AUR
           command: |
             cd /tmp
-            echo -n $AUR_FINGERPRINT |base64 -d >> ~/.ssh/known_hosts
-            git clone ssh://aur@aur.archlinux.org/fdic.git
-            cd fdic
-            git config user.name "$AUR_USER_NAME"
-            git config user.email "$AUR_USER_EMAIL"
-            sed -i "s/[0-9]\.[0-9]\.[0-9]/$(cat ~/workspace/VERSION)/g" .SRCINFO
-            sed -i "s/pkgver=.*/pkgver=$(cat ~/workspace/VERSION)/" PKGBUILD
+            ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts
+            git clone ssh://aur@aur.archlinux.org/kube-capacity.git
+            cd kube-capacity
+            git config user.name "Toxblh Bot"
+            git config user.email "aur@palgunov.com"
+            echo $(cat ~/aur/VERSION)
+            sed -i "s/[0-9]\.[0-9]\.[0-9]/$(cat ~/aur/VERSION)/g" .SRCINFO
+            sed -i "s/pkgver=.*/pkgver=$(cat ~/aur/VERSION)/" PKGBUILD
             git add .
-            git commit -m $(cat ~/workspace/VERSION)
+            git commit -m $(cat ~/aur/VERSION)
             git push
 
 workflows:
   version: 2
   workflow:
     jobs:
-    - test_aur
+    # - test_aur
     - release_aur
