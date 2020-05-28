@@ -32,11 +32,6 @@ jobs:
       - checkout
 
       - run:
-          name: Prepare PKGBUILD
-          command: |
-
-
-      - run:
           name: Update AUR
           command: |
             cd /tmp
