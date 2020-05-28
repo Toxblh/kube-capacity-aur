@@ -1,0 +1,58 @@
+version: 2
+jobs:
+  test-aur:
+    docker:
+      - image: imrehg/archlinux-makepkg
+    working_directory: ~/aur
+    steps:
+    - run:
+        name: Update packages
+        command: sudo pacman -Syu --noconfirm
+    - checkout
+    - run:
+        name: Git clone repo
+        command: |
+          git clone https://aur.archlinux.org/kube-capacity.git
+    - run:
+        name: Testing PKGBUILD
+        command: |
+          cd ~/aur/kube-capacity
+          namcap PKGBUILD
+    - run:
+        name: Building package
+        command: |
+          cd ~/aur/kube-capacity
+          makepkg -sci --noconfirm
+
+  release_aur:
+    working_directory: ~/aur
+    docker:
+      - image: circleci/buildpack-deps
+    steps:
+      - checkout
+
+      - run:
+          name: Prepare PKGBUILD
+          command: |
+
+
+      - run:
+          name: Update AUR
+          command: |
+            cd /tmp
+            echo -n $AUR_FINGERPRINT |base64 -d >> ~/.ssh/known_hosts
+            git clone ssh://aur@aur.archlinux.org/fdic.git
+            cd fdic
+            git config user.name "$AUR_USER_NAME"
+            git config user.email "$AUR_USER_EMAIL"
+            sed -i "s/[0-9]\.[0-9]\.[0-9]/$(cat ~/workspace/VERSION)/g" .SRCINFO
+            sed -i "s/pkgver=.*/pkgver=$(cat ~/workspace/VERSION)/" PKGBUILD
+            git add .
+            git commit -m $(cat ~/workspace/VERSION)
+            git push
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+    - release-aur
