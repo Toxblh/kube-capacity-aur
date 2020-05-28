@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test-aur:
+  test_aur:
     docker:
       - image: imrehg/archlinux-makepkg
     working_directory: ~/aur
@@ -55,4 +55,5 @@ workflows:
   version: 2
   workflow:
     jobs:
-    - release-aur
+    - test_aur
+    - release_aur
