@@ -52,4 +52,9 @@ workflows:
   workflow:
     jobs:
     # - test_aur
-    - release_aur
+    - release_aur:
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /[0-9]+(\.[0-9]+)*(-.*)*/
